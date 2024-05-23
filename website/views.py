@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse ,HttpResponseRedirect
 from website.models import *
 from website.forms import ContactForm , NewsletterForm
-
+from django.contrib import messages
 
 # Create your views here.
 def index_view(request):
@@ -16,11 +16,14 @@ def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = request.POST.get('name')
-            email = request.POST.get('email')
-            subject = request.POST.get('subject')
-            message = request.POST.get('message')
-            Contact.objects.create(name=name, email=email, subject=subject, message=message)
+            instance = form.save(commit=False)
+            instance.name = "unknown"
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Your ticket submitted successfully.')
+
+        else:
+            messages.add_message(request, messages.ERROR, 'your ticket didnt submitted')
+
     form = ContactForm()
     return render(request, 'website/contact.html', {'form': form})
 # def test(request):
@@ -37,8 +40,7 @@ def newsletter_view(request):
     if request.method == 'POST':
         form = NewsletterForm(request.POST)
         if form.is_valid():
-            email = request.POST.get('email')
-            Newsletter.objects.create(email=email)
+            form.save()
             return HttpResponseRedirect('/')
     else:
         return HttpResponseRedirect('/')

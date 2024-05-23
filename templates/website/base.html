@@ -53,10 +53,19 @@
 			  		</div>			  					
 					</div>
 				</div>
+                {% if messages %}
+        <div id="message-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 				<div class="container main-menu">
 					<div class="row align-items-center justify-content-between d-flex">
 				      <div id="logo">
-				        <a href="index.html"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
+				        <a href="{% url "blog:index" %}"><img src="{% static "img/logo.png" %}" alt="" title="" /></a>
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
@@ -118,7 +127,7 @@
                                         {% csrf_token %}
 										<div class="input-group d-flex flex-row">
 											<input name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '" required="" type="email">
-											<button class="btn bb-btn" type="submit"><span class="lnr lnr-location"></span></button>		
+											<button class="btn bb-btn" type="submit"><span class="lnr lnr-location"></span></button>
 										</div>									
 										<div class="mt-10 info"></div>
 									</form>
@@ -141,6 +150,7 @@
 							</div>
 						</div>						
 					</div>
+                    
 
 					<div class="row footer-bottom d-flex justify-content-between align-items-center">
 						<p class="col-lg-8 col-sm-12 footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
