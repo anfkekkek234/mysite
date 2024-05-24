@@ -1,10 +1,13 @@
-from django.shortcuts import render , get_object_or_404
+from django.shortcuts import render , get_object_or_404 , redirect
 from django.utils import timezone
 from blog.models import Post , Comment
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from website.models import Contact
 from blog.forms import CommentForm
 from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 # Create your views here.
 def blog(request,**kwargs):
     current_time = timezone.now()
@@ -41,29 +44,30 @@ def blog_single(request, pid):
             messages.add_message(request, messages.ERROR, 'Your comment didn\'t submit')
     else:
         form = CommentForm()
+    if not post.login_required:
+        comments = Comment.objects.filter(post=post.id, approved=True)
+        post.counted_views += 1
+        post.save()
+        all_posts = Post.objects.filter(status=1, published_date__lte=current_time)
+        current_index = list(all_posts).index(post)
 
-    comments = Comment.objects.filter(post=post.id, approved=True)
-    post.counted_views += 1
-    post.save()
-    all_posts = Post.objects.filter(status=1, published_date__lte=current_time)
-    current_index = list(all_posts).index(post)
+        previous_post = None
+        next_post = None
+        if current_index > 0:
+            previous_post = all_posts[current_index - 1]
+        if current_index < len(all_posts) - 1:
+            next_post = all_posts[current_index + 1]
 
-    previous_post = None
-    next_post = None
-    if current_index > 0:
-        previous_post = all_posts[current_index - 1]
-    if current_index < len(all_posts) - 1:
-        next_post = all_posts[current_index + 1]
-
-    context = {
-        'post': post,
-        'previous_post': previous_post,
-        'next_post': next_post,
-        'comments': comments,
-        'form': form,
-    }
-    return render(request, 'blog/blog-single.html', context)
-
+        context = {
+            'post': post,
+            'previous_post': previous_post,
+            'next_post': next_post,
+            'comments': comments,
+            'form': form,
+        }
+        return render(request, 'blog/blog-single.html', context)
+    else:
+        return HttpResponseRedirect(reverse('accounts:login'))
 
 
 
