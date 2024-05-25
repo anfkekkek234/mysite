@@ -187,3 +187,16 @@ INTERNAL_IPS = [
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'accounts.backends.UsernameOrEmailBackend',    # Custom backend
+]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # آدرس صحیح SMTP سرور
+EMAIL_PORT = 587  # یا پورت مناسب دیگر (25، 465، ...)
+EMAIL_USE_TLS = True  # یا EMAIL_USE_SSL اگر سرور از SSL استفاده می‌کند
+EMAIL_HOST_USER = 'awp.828.cr7@gmail.com'
+EMAIL_HOST_PASSWORD = 'tiumbwivxzctbdnx'
+DEFAULT_FROM_EMAIL = 'awp.828.cr7@gmail.com'
+
