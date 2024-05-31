@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , include
+from django.urls import path , include , re_path
 from django.conf import settings
 from website.sitemaps import StaticViewSitemap
 from django.contrib.sitemaps.views import sitemap
@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from blog.sitemaps import BlogSitemap
 import debug_toolbar
 
+from .views import coming_soon
 sitemaps = {
     "static": StaticViewSitemap,
     'blog': BlogSitemap,
@@ -42,6 +43,7 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('captcha/',include('captcha.urls')),
     path('accounts/',include('accounts.urls')),
+    path('coming_soon/', coming_soon, name='coming_soon'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
