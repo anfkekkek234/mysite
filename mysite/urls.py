@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 from blog.sitemaps import BlogSitemap
 import debug_toolbar
 
-from .views import coming_soon
+# from .views import coming_soon
 sitemaps = {
     "static": StaticViewSitemap,
     'blog': BlogSitemap,
@@ -43,7 +43,7 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('captcha/',include('captcha.urls')),
     path('accounts/',include('accounts.urls')),
-    path('coming_soon/', coming_soon, name='coming_soon'),
+    # path('coming_soon/', coming_soon, name='coming_soon'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
